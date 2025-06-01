@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактировать пост{% endblock %}
+
+{% block content %}
+<h2>Редактировать</h2>
+<form method="POST" class="form-control" style="background: #fafbfc; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 18px 12px; max-width: 480px; margin: 0 auto;">
+  <input type="text" name="title" value="{{ post.title }}" placeholder="Заголовок" class="form-control mb-3" required style="margin-bottom: 12px;">
+  <input type="text" name="text" value="{{ post.text }}" placeholder="Текст" class="form-control mb-3" required style="margin-bottom: 12px;">
+  <button class="btn btn-primary" type="submit">Сохранить</button>
+  <a href="{{ url_for('posts') }}" class="btn btn-secondary" style="margin-top:10px;">Отмена</a>
+</form>
+{% endblock %}

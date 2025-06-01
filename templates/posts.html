@@ -7,23 +7,53 @@
 
 
 {% block content %}
-<h1>Все посты</h1>
 
 
+{# Флеш-сообщения #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+        <li class="flash flash-{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+{# Форма добавления поста только для авторизованных #}
+{% if current_user.is_authenticated %}
+<form method="POST" class="form-control mb-4" style="background: #fafbfc; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 18px 12px;">
+  <input type="text" name="title" placeholder="Введите заголовок" class="form-control mb-3" required style="margin-bottom: 12px;">
+  <input type="text" name="text" placeholder="Введите текст" class="form-control mb-3" required style="margin-bottom: 12px;">
+  <button class="btn btn-primary" type="submit">Добавить</button>
+</form>
+{% endif %}
+
+<h1>Все публикации</h1>
+
+
+{% if posts|length == 0 %}
+  <div style="text-align:center; color:#888; font-size:1.1em; margin-top:32px;">Посты отсутствуют</div>
+{% else %}
 <div class="row">
-
   {% for post in posts %}
-  <div class="col-md-6 item">
-    <div class="item-in">
+  <div class="col-md-6 item" style="margin-bottom: 32px;">
+    <div class="item-in post-card" style="border: 1.5px solid #ececec; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); background: #fff; padding: 22px 18px;">
       <h4>{{ post.title }}</h4>
-      <div class="seperator"></div>
+      <div style="height:1px;background:#e0e0e0;margin:16px 0 18px 0;"></div>
       <p>{{ post.text }}</p>
-      <a href="#">Читать далее</a>
-        <i class="fa fa-long-arrow-right"></i>
-      </a>
+      <div style="margin-top:12px; color:#888; font-size:0.98em;">Автор: {{ post.user.username if post.user else 'Неизвестно' }}</div>
+      {% if current_user.is_authenticated and post.user_id == current_user.id %}
+        <div style="margin-top:14px; display: flex; gap: 10px;">
+          <a href="{{ url_for('edit_post', post_id=post.id) }}" style="text-decoration: none;" ><button class="btn btn-primary" style="min-width:120px; text-align:center;" >Изменить</button></a>
+          <form method="POST" action="{{ url_for('delete_post', post_id=post.id) }}" style="display:inline; margin:0;">
+            <button type="submit" class="btn btn-primary" style="min-width:120px; text-align:center;">Удалить</button>
+          </form>
+        </div>
+      {% endif %}
     </div>
   </div>
   {% endfor %}
 </div>
-
+{% endif %}
 {% endblock %}

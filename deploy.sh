@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # === НАСТРОЙКИ ===
-PROJECT_NAME="my_flask_app"                     # Имя systemd-сервиса
+PROJECT_NAME="app"                     # Имя systemd-сервиса
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 DOMAIN="сhechen-community.ru"                          # 🔁 ЗАМЕНИ на свой домен
 PORT=8000
